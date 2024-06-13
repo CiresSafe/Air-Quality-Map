@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Air Quality Map</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB95mQsr7V0SeOnGgXSZQXdgjJiAPRWh0M"></script>
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: {lat: 51.199936, lng: -2.437830},
+                mapTypeId: 'satellite'
+            });
+
+            var locations = [
+                {lat: 50.3341198, lng: -4.74853992, pm25: 3.5, pm10: 6.3, particles: 598, sound: 60.2, time: '11-06-24/15:35'},
+                {lat: 50.33416272, lng: -4.74847555, pm25: 4.2, pm10: 7.1, particles: 659, sound: 54.7, time: '11-06-24/15:36'},
+                {lat: 50.33416272, lng: -4.74847555, pm25: 5.6, pm10: 9.6, particles: 860, sound: 64, time: '11-06-24/15:37'},
+                {lat: 50.33418417, lng: -4.748497, pm25: 4.9, pm10: 8.2, particles: 780, sound: 56.4, time: '11-06-24/15:38'},
+                {lat: 50.33427001, lng: -4.74845409, pm25: 5.5, pm10: 10, particles: 856, sound: 54.2, time: '11-06-24/15:39'},
+                {lat: 50.33605099, lng: -4.74025726, pm25: 2.9, pm10: 4.5, particles: 459, sound: 63, time: '11-06-24/15:40'},
+                {lat: 50.3391409, lng: -4.73530054, pm25: 1.4, pm10: 2, particles: 210, sound: 56.4, time: '11-06-24/15:41'},
+                {lat: 50.34283162, lng: -4.73489284, pm25: 1.6, pm10: 2.7, particles: 241, sound: 63.7, time: '11-06-24/15:42'},
+                {lat: 50.34536362, lng: -4.74173784, pm25: 1.8, pm10: 2.5, particles: 296, sound: 51.8, time: '11-06-24/15:43'},
+                {lat: 50.34287453, lng: -4.74967718, pm25: 1.9, pm10: 3.3, particles: 338, sound: 61.4, time: '11-06-24/15:44'},
+                {lat: 50.3501916, lng: -4.76145744, pm25: 1.6, pm10: 2.6, particles: 256, sound: 62.6, time: '11-06-24/15:45'},
+                {lat: 50.35600663, lng: -4.77731466, pm25: 1.7, pm10: 2.9, particles: 300, sound: 51.8, time: '11-06-24/15:46'},
+                {lat: 50.35860301, lng: -4.78709936, pm25: 2.1, pm10: 3.9, particles: 394, sound: 64.2, time: '11-06-24/15:47'},
+                {lat: 50.35961152, lng: -4.79660511, pm25: 1.6, pm10: 3.5, particles: 265, sound: 59.9, time: '11-06-24/15:48'},
+                {lat: 50.35598517, lng: -4.79958772, pm25: 2.3, pm10: 3.8, particles: 411, sound: 49.7, time: '11-06-24/15:49'},
+                {lat: 50.35596371, lng: -4.79870796, pm25: 7.4, pm10: 13.7, particles: 1178, sound: 49, time: '11-06-24/15:50'},
+                                              // Add more locations here
+            ];
+
+            var particlesThreshold = 50;
+
+            locations.forEach(function(location) {
+                var color = location.particles > particlesThreshold ? 'red' : 'green';
+
+                var contentString = `
+                    <div>
+                        <h2>Air Quality Data</h2>
+                        <p>Time: ${location.time}</p>
+                        <p>Latitude: ${location.lat}</p>
+                        <p>Longitude: ${location.lng}</p>
+                        <p>PM2.5: ${location.pm25}</p>
+                        <p>PM10: ${location.pm10}</p>
+                        <p>Particles: ${location.particles}</p>
+                        <p>Sound: ${location.sound} dB</p>
+                    </div>
+                `;
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                var marker = new google.maps.Marker({
+                    position: {lat: location.lat, lng: location.lng},
+                    map: map,
+                    title: 'Air Quality Data',
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: color,
+                        fillOpacity: 1,
+                        strokeWeight: 1
+                    }
+                });
+
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                });
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</head>
+<body>
+    <div id="map" style="height: 100vh; width: 100%;"></div>
+</body>
+</html>
